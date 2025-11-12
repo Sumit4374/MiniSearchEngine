@@ -4,13 +4,11 @@ import { saveHistory, loadHistory, clearHistoryStorage } from './store';
 export const searchHistory = new SearchHistoryList(50);
 let isHistoryInitialized = false;
 
-// Initialize history from storage
 function initializeHistory() {
   if (!isHistoryInitialized) {
     console.log('Initializing history...');
     const savedHistory = loadHistory();
     
-    // Load history in reverse order to maintain chronological order
     for (let i = savedHistory.length - 1; i >= 0; i--) {
       const entry = savedHistory[i];
       searchHistory.addWithTimestamp(entry.query, entry.timestamp);
@@ -27,7 +25,6 @@ export function addSearchQuery(query: string): void {
   if (query && query.trim().length > 0) {
     searchHistory.add(query.trim());
     
-    // Save to persistent storage
     const allHistory = searchHistory.getAll();
     saveHistory(allHistory);
   }

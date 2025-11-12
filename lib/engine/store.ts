@@ -8,21 +8,18 @@ const INDEX_FILE = path.join(STORAGE_DIR, 'index.json');
 const DOCUMENTS_FILE = path.join(STORAGE_DIR, 'documents.json');
 const HISTORY_FILE = path.join(STORAGE_DIR, 'history.json');
 
-// Ensure storage directory exists
 function ensureStorageDir() {
   if (!fs.existsSync(STORAGE_DIR)) {
     fs.mkdirSync(STORAGE_DIR, { recursive: true });
   }
 }
 
-// Save Trie data to file
 export function saveIndex(trie: Trie): void {
   try {
     ensureStorageDir();
     const words = trie.getAllWords();
     const data: any = {};
 
-    // Save all words and their occurrences
     words.forEach(word => {
       const node = trie.search(word);
       if (node) {
@@ -39,7 +36,6 @@ export function saveIndex(trie: Trie): void {
   }
 }
 
-// Load Trie data from file
 export function loadIndex(trie: Trie): void {
   try {
     if (!fs.existsSync(INDEX_FILE)) {
@@ -49,7 +45,6 @@ export function loadIndex(trie: Trie): void {
 
     const data = JSON.parse(fs.readFileSync(INDEX_FILE, 'utf-8'));
     
-    // Reconstruct the Trie from saved data
     Object.entries(data).forEach(([word, wordData]: [string, any]) => {
       wordData.occurrences.forEach((occ: any) => {
         trie.insert(word, occ.docName, occ.line, occ.index);
@@ -62,7 +57,6 @@ export function loadIndex(trie: Trie): void {
   }
 }
 
-// Save documents metadata
 export function saveDocuments(documents: IndexedDocument[]): void {
   try {
     ensureStorageDir();
@@ -77,7 +71,6 @@ export function saveDocuments(documents: IndexedDocument[]): void {
   }
 }
 
-// Load documents metadata
 export function loadDocuments(): IndexedDocument[] {
   try {
     if (!fs.existsSync(DOCUMENTS_FILE)) {
@@ -96,7 +89,6 @@ export function loadDocuments(): IndexedDocument[] {
   }
 }
 
-// Clear all stored data
 export function clearStorage(): void {
   try {
     if (fs.existsSync(INDEX_FILE)) {
@@ -111,7 +103,6 @@ export function clearStorage(): void {
   }
 }
 
-// Save search history
 export function saveHistory(history: { query: string; timestamp: Date }[]): void {
   try {
     ensureStorageDir();
@@ -126,7 +117,6 @@ export function saveHistory(history: { query: string; timestamp: Date }[]): void
   }
 }
 
-// Load search history
 export function loadHistory(): { query: string; timestamp: Date }[] {
   try {
     if (!fs.existsSync(HISTORY_FILE)) {
@@ -145,7 +135,6 @@ export function loadHistory(): { query: string; timestamp: Date }[] {
   }
 }
 
-// Clear history
 export function clearHistoryStorage(): void {
   try {
     if (fs.existsSync(HISTORY_FILE)) {

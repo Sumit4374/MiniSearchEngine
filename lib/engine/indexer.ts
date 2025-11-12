@@ -11,10 +11,7 @@ export interface IndexedDocument {
 }
 
 let indexedDocuments: IndexedDocument[] = [];
-
-// Initialize from persistent storage
 export function initializeStorage() {
-  // Always check if we need to load from storage
   const currentWords = globalTrie.getAllWords();
   if (currentWords.length === 0) {
     console.log('Initializing storage...');
@@ -54,7 +51,6 @@ export function indexDocument(docName: string, content: string): void {
     indexedAt: new Date()
   });
 
-  // Save to persistent storage
   saveIndex(globalTrie);
   saveDocuments(indexedDocuments);
   
@@ -70,10 +66,8 @@ export function clearIndex(): void {
   initializeStorage();
   indexedDocuments = [];
   
-  // Clear persistent storage
   clearStorage();
   
-  // Reset the trie
   Object.keys(globalTrie.root.children).forEach(key => {
     delete globalTrie.root.children[key];
   });
